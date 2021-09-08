@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="/" method="POST">
+    <input type="number" name="code" placeholder="Code of product">
+    <input type="text" name="name" placeholder="Name">
+    <input type="number" name="stock" placeholder="Stock">
+    <input type="number" name="value">
+  
+    <select name="category"> 
+        <option selected> Select one of the categories</option>
+        <option value="{{product.5}">{{product.6}}</option>
+    </select>
+    <button type="submit">
+        Send
+    </button>
+</form>>
+{% for product in data %}
+    {{product.0}}
+    <form action="/delete/product/{{product.0}}" method="POST">
+        <button>
+            Delete
+        </button>
+    </form>
+    <a href="/update/product/{{product.0}}">
+        Update
+    </a>
+    </form>
+{% else %}
+    <p>Its not products</p>
+    
+{% endfor %}
+{% endblock %}
