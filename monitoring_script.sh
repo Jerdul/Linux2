@@ -1,8 +1,13 @@
 #!/bin/bash
 
 # creating log file
-# TODO: if not exists OR increment name with versio-nr/date-stamp
+
+# TODO: 
+# if not exists OR increment name with versio-nr/date-stamp
 touch monitor_log.log
+
+# format for time stamp in file-names
+current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 
 # printing timestamp to log file
 date >> monitor_log.log
@@ -18,7 +23,7 @@ else
 fi
 
 
-# --- MYSQL ---
+# --- DATABASE MYSQL ---
 # checking if service active
 STATUS="$(systemctl is-active mysql)"
 if [ "${STATUS}" = "active" ]; then
@@ -28,12 +33,16 @@ else
 fi
 
 # making backup of database
-mysqldump -u (username) -p (password) db_name > db_backup.sql
-# TODO:
-#  --> if db_backup.sql exist, increment number.
+mysqldump -u "<username>" -p "<password>" "<db_name>" > db_backup_"$current_time".sql
 
 # TODO:
-# check for old backups
+# if not exist -> mkdir db_backups
+
+# check for backups older than 5 days
+old_backups=$(find <location> -name "*.sql" -type f -mtime +5)
+
+# delete old backup
+$old_backup -delete
 
 
 # --- AUTHENTICATION ---
@@ -48,14 +57,11 @@ grep "accepted password" /var/log/auth.log | cut -d '=' -f 8 >> monitor_log.log
 
 
 # --- PORTS ---
-# example: to be continued...
-
 # check listening ports
 sudo lsof -i -P -n | grep LISTEN
 
 # check specific port. Example port 22:
 sudo lsof -i:22
-
 
 
 # --- STORAGE ---
