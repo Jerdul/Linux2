@@ -1,1 +1,7 @@
 venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+__pycache__\hello.cpython-38.pyc
+ci.yml
