@@ -49,7 +49,14 @@ grep "accepted password" /var/log/auth.log | cut -d '=' -f 8 >> monitor_log.log
 
 # --- PORTS ---
 # example: to be continued...
-grep "port 22" /var/log/auth.log
+
+# check listening ports
+sudo lsof -i -P -n | grep LISTEN
+
+# check specific port. Example port 22:
+sudo lsof -i:22
+
+
 
 # --- STORAGE ---
 
