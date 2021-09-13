@@ -54,6 +54,7 @@ printf "\nAccepted logins: \n" >> monitor_log.log
 grep "accepted password" /var/log/auth.log | cut -d '=' -f 8 >> monitor_log.log
 
 # --- FILE-PERMISSIONS ---
+find /var/log -printf "\nFile name: %f | Groups: %m | Permissions: (%M) \n_____________________________________________________________\n" >> monitor_log
 
 
 # --- PORTS ---
