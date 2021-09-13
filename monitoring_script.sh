@@ -3,6 +3,7 @@
 toFile="$( >> monitorLog.log)"
 
 # creating log file
+# TODO: if not exists OR increment name with versio-nr/date-stamp
 touch monitor_log.log
 
 # printing timestamp to log file
@@ -33,7 +34,7 @@ mysqldump -u (username) -p (password) db_name > db_backup.sql
 # --> if db_backup.sql exist, increment number.
 
 # TODO:
-# cehck for old backups
+# check for old backups
 
 
 # --- AUTHENTICATION ---
@@ -60,3 +61,17 @@ sudo lsof -i:22
 
 # --- STORAGE ---
 
+df -H | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $5 " " $1 }' | while read output;
+do
+  echo $output
+  usep=$(echo $output | awk '{ print $1}' | cut -d'%' -f1  )
+  partition=$(echo $output | awk '{ print $2 }' )
+  if [ $usep -ge 80 ]; then
+    echo "Running out of space \"$partition ($usep%)\" on $(hostname) as on $(date)" # |
+    # TODO: ignore /loop1-4
+    
+    # Install mail-function if wanted
+    # mail -s "Alert: Almost out of disk space $usep%" admin@server.se
+
+  fi
+done
