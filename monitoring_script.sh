@@ -50,7 +50,7 @@ printf "\nAuthentication Failures: \n"
 # printing usernames to log file
 grep "authentication failure" /var/log/auth.log | cut -d '=' -f 8
 
-printf "\nAccepted logins: \n" >> monitor_log.log
+printf "\nAccepted logins: \n"
 grep "accepted password" /var/log/auth.log | cut -d '=' -f 8
 
 # --- FILE-PERMISSIONS ---
