@@ -10,7 +10,7 @@ to_file="monitor_$current_time.log
 date > $to_file
 
 
-printf '\n\n\n ======================================= \nAPACHE\n======================================='
+printf '\n\n\n======================================= \nAPACHE\n=======================================\n' >> $to_file
 
 
 
@@ -26,7 +26,7 @@ else
     printf "\nApache is: ${STATUS} and not running...\n" >> $to_file
 fi
 
-printf '\n\n\n ======================================= \nDATABASE MYSQL\n======================================='
+printf '\n\n\n======================================= \nDATABASE MYSQL\n=======================================\n' >> $to_file
 
 
 
@@ -49,11 +49,16 @@ mysql --user root --password [db_name] > [db_name].sql
 
 # check for backups older than 5 days
 old_backups=$(find <location> -name "*.sql" -type f -mtime +5)
-
+printf "\n OLD BACKUPS:\n" >> $to_file
+echo $old_backups >> $to_file
 # delete old backup
 $old_backup -delete
+printf "\n DELETED BACKUPS:\n" >> $to_file
+echo $old_backups >> $to_file
 
-printf '\n\n\n ======================================= \nAUTHENTICATION\n======================================='
+
+printf '\n\n\n======================================= \nAUTHENTICATION\n=======================================\n' >> $to_file
+
 
 
 
@@ -68,29 +73,33 @@ grep "authentication failure" /var/log/auth.log | cut -d '=' -f 8 >> $to_file
 printf "\nAccepted logins: \n" >> $to_file
 grep "accepted password" /var/log/auth.log | cut -d '=' -f 8 >> $to_file
 
-printf '\n\n\n ======================================= \nFILE PERMISSIONS\n======================================='
+printf '\n\n\n======================================= \nFILE PERMISSIONS\n=======================================\n' >> $to_file
+
 
 
 ##############################
 #      FILE-PERMISSIONS      # Where should we check permissions? What files?
 ##############################
-find /var/log -printf "\nFile name: %f | Groups: %m | ID: %i | Permissions: (%M) \n_____________________________________________________________\n" >> $to_file
+find /var/log -printf "\nFile name: %f | Groups: %m | ID: %i | Permissions: (%M) \n" >> $to_file
 
 
-printf '\n\n\n ======================================= \nPORTS\n======================================='
+printf '\n\n\n======================================= \nPORTS\n=======================================\n' >> $to_file
+
 
 
 ###################
 #      PORTS      #
 ###################
 
+printf "\nLISTENING ON PORTS:\n" >> $to_file
+
 # check listening ports
-lsof -i -P -n | grep LISTEN >> $to_file
+sudo lsof -i -P -n | grep LISTEN >> $to_file
 
 # IF WANTED: check specific port. Example port 22:
-lsof -i:22 >> $to_file
+sudo lsof -i:22 >> $to_file
 
-printf '\n\n\n ======================================= \nSTORAGE\n======================================='
+printf '\n\n\n======================================= \nSTORAGE\n=======================================\n' >> $to_file
 
 
 
@@ -112,3 +121,6 @@ do
     fi
   fi
 done
+
+
+
