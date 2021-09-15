@@ -4,11 +4,13 @@
 # format for time stamp in file-names
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 
-to_file="monitor_$(current_time).log
+to_file="monitor_$current_time.log
 "
 # printing timestamp to log file
 date > $to_file
 
+
+printf '\n\n\n ======================================= \nAPACHE\n======================================='
 
 
 
@@ -24,6 +26,7 @@ else
     printf "\nApache is: ${STATUS} and not running...\n" >> $to_file
 fi
 
+printf '\n\n\n ======================================= \nDATABASE MYSQL\n======================================='
 
 
 
@@ -50,6 +53,7 @@ old_backups=$(find <location> -name "*.sql" -type f -mtime +5)
 # delete old backup
 $old_backup -delete
 
+printf '\n\n\n ======================================= \nAUTHENTICATION\n======================================='
 
 
 
@@ -64,10 +68,16 @@ grep "authentication failure" /var/log/auth.log | cut -d '=' -f 8 >> $to_file
 printf "\nAccepted logins: \n" >> $to_file
 grep "accepted password" /var/log/auth.log | cut -d '=' -f 8 >> $to_file
 
-# --- FILE-PERMISSIONS ---
+printf '\n\n\n ======================================= \nFILE PERMISSIONS\n======================================='
+
+
+##############################
+#      FILE-PERMISSIONS      # Where should we check permissions? What files?
+##############################
 find /var/log -printf "\nFile name: %f | Groups: %m | ID: %i | Permissions: (%M) \n_____________________________________________________________\n" >> $to_file
 
 
+printf '\n\n\n ======================================= \nPORTS\n======================================='
 
 
 ###################
@@ -80,6 +90,7 @@ lsof -i -P -n | grep LISTEN >> $to_file
 # IF WANTED: check specific port. Example port 22:
 lsof -i:22 >> $to_file
 
+printf '\n\n\n ======================================= \nSTORAGE\n======================================='
 
 
 
