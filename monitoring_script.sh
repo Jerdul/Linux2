@@ -97,7 +97,7 @@ do
     partition=$(echo $output | awk '{ print $2 }' )
     if [ $usep -ge 80 ]; then
       echo "Running out of space \"$partition ($usep%)\" on $(hostname) as on $(date)" >> $to_file
-      # mail -s "Alert: Almost out of disk space $usep%" admin@server.se
+      mail -s 'Alert: Almost out of disk space' ludvig@jerner.se <<< 'You are running out of disk space: $usep%.'
     fi
   fi
 done
